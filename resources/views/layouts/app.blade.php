@@ -17,10 +17,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @Auth()
         @php
-            $user_id = Auth::user()->id;
+            $user = ['name' => Auth::user()->name, 'email' => Auth::user()->email] ;
         @endphp
         <script>
-            window.user_id = '{{ $user_id ?? '' }}';
+            window.user = '{!! json_encode($user) !!}';
         </script>
     @endauth
 </head>

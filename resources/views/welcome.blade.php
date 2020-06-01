@@ -68,7 +68,6 @@
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
-                        <a href="{{ url('/dashboard') }}">Dashboard</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -84,11 +83,7 @@
                     {{session('error')}}
                 </div>
             @else
-                @auth
-                    <div class="alert">
-                        You are logged in!
-                    </div>
-                @endauth
+                You are logged in!
             @endif
         <script src="{{ asset('js/app.js') }}"></script>
     </body>

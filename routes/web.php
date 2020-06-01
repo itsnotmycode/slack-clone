@@ -19,6 +19,8 @@ Auth::routes([ 'verify' => true ]);
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/channels', 'ChannelController@index');
+Route::post('/channels/create', 'ChannelController@create');
+Route::get('/users', 'UserController@index');
 
 Route::group(['prefix' => 'channels'], function () {
     Route::get('/messages', 'MessageController@showMessages');
@@ -27,9 +29,6 @@ Route::group(['prefix' => 'channels'], function () {
 
 Route::get('/oauth/{service}', 'Auth\LoginController@oauth');
 Route::get('/callback/{service}', 'Auth\LoginController@callback');
-
-Route::post('/user/update', 'UserController@update');
-Route::get('/user/get', 'UserController@getuser');
 
 Route::get('/dashboard{any?}', 'DashboardController@index')->where('any', '.*')->name('dashboard');
 

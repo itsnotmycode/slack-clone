@@ -1,5 +1,4 @@
 @extends('layouts.app')
-{{--@json($userInfo)--}}
 
 @section('content')
     <home inline-template>

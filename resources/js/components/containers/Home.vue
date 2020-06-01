@@ -1,30 +1,19 @@
 <template>
   <v-app app>
-    <v-navigation-drawer app>
+    <v-navigation-drawer color="#3f0e40" app dark permanent>
       <v-container>
-        <div class="mb-3 relative">
-            <v-avatar style="cursor: pointer;" color="black" @click="dropdown()">
-              <span class="white--text headline">{{ this.user.name && this.user.name[0] }}</span>
-            </v-avatar>
-          <span class="black--text">{{ this.user.email && this.user.email }}</span>
-          <v-card v-if="this.activeDropdown" :elevation="16"
-                  class="dropdown"
-                  v-on-clickaway="hideInfo"
-          >
-            <v-list-item-group>
-              <v-list-item @click="userInfo('show')"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>
-                    User Profile Page
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-card>
-        </div>
-        <v-list-item-group>
-          <v-list-item class="link" v-for="channel in allChannels" :key="channel.id"
+        <v-list>
+          <v-list-item>
+            <v-list-item-title>
+              <strong>Channels</strong>
+            </v-list-item-title>
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon>mdi-plus-circle-outline</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+          <v-list-item class="link" v-for="channel in groupChannels" :key="channel.id"
                        router :to="{path: '/chat/' + channel.id}"
           >
             <v-list-item-content>
@@ -33,14 +22,45 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-item-group>
+        </v-list>
+        <v-list>
+          <v-list-item>
+            <v-list-item-title>
+              <v-tooltip top open-delay="500" color="black" content-class="c-tooltip">
+                <template v-slot:activator="{ on }">
+                  <strong v-on="on">Direct Messages</strong>
+                </template>
+                <span>Open a direct message</span>
+              </v-tooltip>
+            </v-list-item-title>
+            <v-list-item-action>
+              <v-tooltip top open-delay="500" color="black" content-class="c-tooltip">
+                <template v-slot:activator="{ on }">
+                  <div v-on="on">
+                    <popup :user="user"></popup>
+                  </div>
+                </template>
+                <span>Open a direct message</span>
+              </v-tooltip>
+            </v-list-item-action>
+          </v-list-item>
+          <v-list-item class="link" v-for="channel in directChannels" :key="channel.id"
+                       router :to="{path: '/chat/' + channel.id}"
+          >
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ channel.name }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
       </v-container>
     </v-navigation-drawer>
     <v-app-bar app>
       <v-toolbar-title>Chat</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+      <v-btn icon href="/logout">
+        <v-icon >mdi-location-exit</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
@@ -48,79 +68,49 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <div v-if="showUserInfo" class='sidebar-info'>
-      <user-sidebar @closeSidebar="userInfo('hide')"></user-sidebar>
-    </div>
   </v-app>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { mixin as clickaway } from 'vue-clickaway';
-import UserSidebar from './UserSidebar.vue';
+import popup from './Popup.vue';
 
 export default {
   name: 'Home',
-  mixins: [clickaway],
   data() {
     return {
-      activeDropdown: false,
+      user: [],
       activeChat: '',
-      showUserInfo: false,
     };
   },
-  components: { UserSidebar },
-  mounted() {
-    this.getUser();
+  components: { popup },
+  async mounted() {
     this.getAllChannels();
+    this.user = JSON.parse(window.user);
   },
   methods: {
-    ...mapActions(['getAllChannels', 'getUser']),
+    ...mapActions(['getAllChannels']),
     makeChatActive(name) {
       this.activeChat = name;
     },
-    dropdown() {
-      this.activeDropdown = !this.activeDropdown;
-    },
-    userInfo(status) {
-      switch (status) {
-        case 'show':
-          this.showUserInfo = true;
-          this.activeDropdown = false;
-          break;
-        case 'hide':
-          this.showUserInfo = false;
-          this.activeDropdown = false;
-          break;
-        default:
-          this.showUserInfo = false;
-          this.activeDropdown = false;
-          break;
-      }
-    },
-    hideInfo() {
-      this.userInfo('hide');
-    },
   },
   computed: {
-    ...mapGetters(['allChannels', 'getCurrentUser']),
-    user() {
-      return this.getCurrentUser;
-    },
+    ...mapGetters(['allChannels', 'directChannels', 'groupChannels']),
   },
 };
 </script>
 
 <style scoped>
-  .dropdown {
+  .c-tooltip:after{
+    content: '';
+    border: 1px solid black;
     position: absolute;
-    z-index: 1;
+    top: 32px;
+    border: 8px solid transparent;
+    border-top: 8px solid black;
+    left: calc( 50% - 8px );
   }
-  .sidebar-info {
-    margin-left: calc(100% - 392px);
-    width: 392px;
-    height: 100vh;
-    position: absolute;
-    z-index: 6;
+  .v-list-item__title{
+    cursor: pointer;
   }
 </style>

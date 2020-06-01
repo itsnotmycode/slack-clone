@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Message;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Events\WebsocketDemoEvent;
 
 class MessageController extends Controller
 {
@@ -15,10 +15,11 @@ class MessageController extends Controller
 
     public function storeMessage(Request $request)
     {
-        auth()->user()->message()->create([
+        $message = auth()->user()->message()->create([
             'message' => $request->params['message'],
             'channel_id' => intval($request->params['channel_id']),
         ]);
+        broadcast(new WebsocketDemoEvent( Message::with('user')->find( $message->id ) ));
 
         return ['status' => 'success'];
     }

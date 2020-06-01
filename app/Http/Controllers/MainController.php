@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 
 class MainController extends Controller
 {

@@ -38,7 +38,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function channel()
     {
-        return $this->hasMany(Channel::class);
+        return $this->belongsToMany(Channel::class);
     }
 
     /**

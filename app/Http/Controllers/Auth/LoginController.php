@@ -96,6 +96,11 @@ class LoginController extends Controller
                 'email' => $service_user->email,
                 'password' => Hash::make($userPassword)
             ]);
+            $user->channel()->create([
+                'name' => $user->name,
+                'admin' => $user->id,
+                'user_channel' => true
+            ]);
             $user->markEmailAsVerified();
 //            event(new Verified($user));
             auth()->login($user);

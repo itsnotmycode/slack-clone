@@ -23,6 +23,9 @@ export default {
     updateMessage(state, payload) {
       state.messages = payload;
     },
+    addMessage(state, message) {
+      state.messages.push(message);
+    },
   },
 
   getters: {

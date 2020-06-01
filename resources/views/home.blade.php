@@ -18,6 +18,8 @@
                         <div class="alert alert-warning" role="alert">
                             {{session('error')}}
                         </div>
+                    @else
+                        You are logged in!
                     @endif
                 </div>
             </div>
