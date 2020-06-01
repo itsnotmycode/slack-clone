@@ -1,0 +1,42 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "plugin:vue/essential",
+        "@vue/airbnb"
+    ],
+    "rules": {
+        "max-len": [
+            2,
+            120
+        ],
+        "jsx-quotes": [
+            "error",
+            "prefer-single"
+        ],
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": true,
+                "optionalDependencies": false,
+                "peerDependencies": false
+            }
+        ]
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".vue",
+                    ""
+                ],
+                "paths": [
+                    "resources/js"
+                ]
+            }
+        }
+    }
+}
