@@ -13,7 +13,8 @@ export default {
         });
     },
     sendMessage(ctx, query) {
-      axios.post('/channels/messages', { params: query })
+      console.log(query);
+      axios.post('/channels/messages', { message: query.message, channel_id: query.channel_id })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
     },
