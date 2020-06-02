@@ -12,25 +12,27 @@
 */
 
 Route::get('/', 'MainController@index')->name('');
-Route::get('/logout', 'Auth\LoginController@logout');
-
-Auth::routes([ 'verify' => true ]);
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/channels', 'ChannelController@index');
-Route::post('/channels/create', 'ChannelController@create');
-Route::get('/users', 'UserController@index');
-
-Route::group(['prefix' => 'channels'], function () {
-    Route::get('/messages', 'MessageController@showMessages');
-    Route::post('/messages', 'MessageController@storeMessage');
-});
 
 Route::get('/oauth/{service}', 'Auth\LoginController@oauth');
 Route::get('/callback/{service}', 'Auth\LoginController@callback');
 
-Route::get('/dashboard{any?}', 'DashboardController@index')->where('any', '.*')->name('dashboard');
+Route::get('/logout', 'Auth\LoginController@logout');
+
+Auth::routes([ 'verify' => true ]);
+
+Route::middleware(['auth'])->group( function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/channels', 'ChannelController@index');
+    Route::get('/users', 'UserController@index');
+
+    Route::group(['prefix' => 'channels'], function () {
+        Route::get('/messages', 'MessageController@showMessages');
+        Route::post('/messages', 'MessageController@storeMessage');
+        Route::post('/create', 'ChannelController@create');
+    });
+
+    Route::get('/dashboard{any?}', 'DashboardController@index')->where('any', '.*')->name('dashboard');
+});
 
 
 //Route::get('/{any}', 'DashboardController@index');
