@@ -55,6 +55,7 @@ export default {
   /*
          * The component's data.
          */
+  name: 'AuthorizedClients',
   data() {
     return {
       tokens: [],

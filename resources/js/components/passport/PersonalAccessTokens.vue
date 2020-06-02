@@ -159,6 +159,7 @@ export default {
   /*
          * The component's data.
          */
+  name: 'PersonalAccessTokens',
   data() {
     return {
       accessToken: null,

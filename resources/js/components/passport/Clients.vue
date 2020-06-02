@@ -261,6 +261,7 @@ export default {
   /*
          * The component's data.
          */
+  name: 'Clients',
   data() {
     return {
       clients: [],

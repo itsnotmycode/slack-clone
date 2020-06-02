@@ -17,8 +17,10 @@
 
 import Echo from 'laravel-echo';
 import jquery from 'jquery';
+import bootstrap from 'bootstrap';
 
-window.$ = window.jQuery = require('jquery');
+window.$ = window.jQuery = jquery;
+
 
 window._ = require('lodash');
 
