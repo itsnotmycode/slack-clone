@@ -23,18 +23,18 @@ class CreateChannelsTable extends Migration
             $table->timestamps();
         });
 
-//        Schema::create('channel_user', function (Blueprint $table) {
-//
-//            $table->bigInteger('channel_id')->unsigned()->index();
-//            $table->foreign('channel_id')->references('id')->on('channels')
-//                ->onDelete('cascade')->onUpdate('cascade');
-//
-//            $table->bigInteger('user_id')->unsigned()->index();
-//            $table->foreign('user_id')->references('id')->on('users')
-//                ->onDelete('cascade')->onUpdate('cascade');
-//
-//            $table->timestamps();
-//        });
+        Schema::create('channel_user', function (Blueprint $table) {
+
+            $table->bigInteger('channel_id')->unsigned()->index();
+            $table->foreign('channel_id')->references('id')->on('channels')
+                ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade')->onUpdate('cascade');
+
+            $table->timestamps();
+        });
     }
 
     /**
@@ -45,6 +45,6 @@ class CreateChannelsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('channels');
-//        Schema::dropIfExists('channel_user');
+        Schema::dropIfExists('channel_user');
     }
 }
