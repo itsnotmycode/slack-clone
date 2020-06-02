@@ -62,7 +62,7 @@ export default {
     return {
       dialog: false,
       searchName: '',
-    }
+    };
   },
   mounted() {
     this.getAllUsers();
@@ -70,9 +70,11 @@ export default {
   methods: {
     ...mapActions(['getAllUsers', 'createChannel', 'getAllChannels']),
     async createDirectChannel(id, name) {
-      await this.createChannel({ user_id: id, channel_name: name, user_channel: true, private: false });
+      await this.createChannel({
+        user_id: id, channel_name: name, user_channel: true, private: false,
+      });
       this.getAllChannels();
-      if (this.$route.params.id != this.getChannelId) {
+      if (this.$route.params.id !== this.getChannelId) {
         this.$router.push({ name: 'Chat', params: { id: this.getChannelId } });
       }
       this.dialog = false;
@@ -81,15 +83,13 @@ export default {
   computed: {
     ...mapGetters(['getUsers', 'currentChannel']),
     filteredUsers() {
-      return this.getUsers.filter((user) => {
-        return user.name.toLowerCase().indexOf(this.searchName.toLowerCase()) !== -1;
-      });
+      return this.getUsers.filter((user) => user.name.toLowerCase().indexOf(this.searchName.toLowerCase()) !== -1);
     },
     getChannelId() {
       return this.currentChannel.id;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

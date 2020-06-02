@@ -2293,7 +2293,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             case 2:
               this.getAllChannels();
 
-              if (this.$route.params.id != this.getChannelId) {
+              if (this.$route.params.id !== this.getChannelId) {
                 this.$router.push({
                   name: 'Chat',
                   params: {
@@ -79509,6 +79509,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; // window.io = require('socket.io-client');
+//
 // window.Echo = new Echo({
 //   broadcaster: 'socket.io',
 //   host: `${window.location.hostname}:6001`,
@@ -80054,6 +80055,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _channels__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./channels */ "./resources/js/components/store/channels/index.js");
 /* harmony import */ var _message__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./message */ "./resources/js/components/store/message/index.js");
 /* harmony import */ var _users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./users */ "./resources/js/components/store/users/index.js");
+/* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./user */ "./resources/js/components/store/user/index.js");
+
 
 
 
@@ -80064,7 +80067,8 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   modules: {
     channels: _channels__WEBPACK_IMPORTED_MODULE_2__["default"],
     chat: _message__WEBPACK_IMPORTED_MODULE_3__["default"],
-    users: _users__WEBPACK_IMPORTED_MODULE_4__["default"]
+    users: _users__WEBPACK_IMPORTED_MODULE_4__["default"],
+    user: _user__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 });
 
@@ -80093,8 +80097,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     sendMessage: function sendMessage(ctx, query) {
+      console.log(query);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/channels/messages', {
-        params: query
+        message: query.message,
+        channel_id: query.channel_id
       }).then(function (res) {
         return console.log(res);
       })["catch"](function (err) {
@@ -80113,6 +80119,70 @@ __webpack_require__.r(__webpack_exports__);
   getters: {
     getMessages: function getMessages(state) {
       return state.messages;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/store/user/index.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/store/user/index.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  state: {
+    user_id: window.user_id,
+    user: {}
+  },
+  actions: {
+    getUser: function getUser(ctx) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/user/get', {
+        params: {
+          id: ctx.state.user_id
+        }
+      }).then(function (res) {
+        ctx.commit('setUser', res.data[0]);
+      });
+    },
+    updateUserInfo: function updateUserInfo(ctx, query) {
+      ctx.commit('updateUser', query);
+    }
+  },
+  mutations: {
+    setUser: function setUser(state, payload) {
+      state.user = payload;
+    },
+    updateUser: function updateUser(state, payload) {
+      var formData = new FormData();
+      formData.append('avatar', payload.avatar);
+      formData.append('name', payload.name);
+      formData.append('email', payload.email);
+      formData.append('id', payload.id);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/user/update', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {
+        return res;
+      });
+      state.user = {
+        avatar: payload.avatar,
+        name: payload.name,
+        email: payload.email
+      };
+    }
+  },
+  getters: {
+    getCurrentUser: function getCurrentUser(state) {
+      return state.user;
     }
   }
 });
