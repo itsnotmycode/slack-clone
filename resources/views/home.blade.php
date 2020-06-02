@@ -19,11 +19,14 @@
                             {{session('error')}}
                         </div>
                     @else
-                        You are logged in!
+                        <passport-clients></passport-clients>
+                        <passport-authorized-clients></passport-authorized-clients>
+                        <passport-personal-access-tokens></passport-personal-access-tokens>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 @endsection
